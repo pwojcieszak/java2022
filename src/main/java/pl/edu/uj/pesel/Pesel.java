@@ -22,6 +22,10 @@ public class Pesel {
     }
 
     int controlSum = 0; // TODO calculate controlSum
+    int[] weight = {1, 3, 7, 9, 1, 3, 7, 9, 1, 3};
+    for (int i = 0; i < PESEL_LEN - 1; i++) {
+      controlSum += Character.getNumericValue(pesel.pesel.charAt(i)) * weight[i];
+    }
 
     final int lastNumber = Character.getNumericValue(pesel.pesel.charAt(PESEL_LEN - 1));
     int controlSumValidation = (controlSum + lastNumber) % 10;
