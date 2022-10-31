@@ -1,5 +1,11 @@
 package pl.edu.uj.sender;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public abstract class Message {
 
     abstract String getMessageTitle();
@@ -10,6 +16,8 @@ public abstract class Message {
 
     String anonymizeMessageBody() {
         // TODO uzupełnij kod do anonimizacji:
-        return "abcd... (MD5)";
+        String md5Hex = DigestUtils
+                .md5Hex(getMessageBody()).toUpperCase();
+        return md5Hex;
     }
 }

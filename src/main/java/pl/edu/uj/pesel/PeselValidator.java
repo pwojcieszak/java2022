@@ -15,7 +15,6 @@ public class PeselValidator {
   private static final Logger logger = LoggerFactory.getLogger(PeselValidator.class);
 
   public static void main(String[] args) {
-    // TODO should read input file path and write to output file
     try {
       File read = new File(args[0]);
       Scanner myReader = new Scanner(read);

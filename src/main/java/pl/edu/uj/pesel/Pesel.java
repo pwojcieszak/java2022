@@ -21,7 +21,7 @@ public class Pesel {
       return false;
     }
 
-    int controlSum = 0; // TODO calculate controlSum
+    int controlSum = 0;
     int[] weight = {1, 3, 7, 9, 1, 3, 7, 9, 1, 3};
     for (int i = 0; i < PESEL_LEN - 1; i++) {
       controlSum += Character.getNumericValue(pesel.pesel.charAt(i)) * weight[i];

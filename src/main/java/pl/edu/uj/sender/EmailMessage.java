@@ -1,5 +1,7 @@
 package pl.edu.uj.sender;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class EmailMessage extends Message {
 
     private final String messageTitle;
@@ -24,5 +26,8 @@ public class EmailMessage extends Message {
     //  Sprawdź, czy messageTitle i messageBody
     //  są poprawne, np. nie puste. Możesz użyć np StringUtils.isEmpty(...)
     //  W przypadku błędu, rzuć wyjątkiem.
-
+    public void validateMessage() throws SenderException{
+        if(StringUtils.isEmpty(messageTitle) || StringUtils.isEmpty(messageBody))
+            throw new SenderException("messsageTitle i/lub messageBody sa niepoprawne");
+    }
 }
