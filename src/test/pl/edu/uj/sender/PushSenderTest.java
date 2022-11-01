@@ -7,6 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PushSenderTest {
     @Test
+    public void testPushSentCorrectly() throws SenderException {
+        PushMessage message = new PushMessage("Title", "Body");
+        PushRecipient recipient = new PushRecipient("pushRecipient123");
+        PushSender push = new PushSender();
+        push.send(message, recipient);
+    }
+    @Test
     public void testMessageAndRecipientType(){
         Exception exception = assertThrows(SenderException.class, () -> {
             new PushSender().send(new EmailMessage("Title", "Body"), new PushRecipient("AdamNowak123"));
