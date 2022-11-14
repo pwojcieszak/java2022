@@ -15,7 +15,6 @@ public abstract class Message {
     abstract void validateMessage() throws SenderException;
 
     String anonymizeMessageBody() {
-        // TODO uzupełnij kod do anonimizacji:
         String md5Hex = DigestUtils
                 .md5Hex(getMessageBody()).toUpperCase();
         return md5Hex;
