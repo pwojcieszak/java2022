@@ -14,10 +14,6 @@ public class PushRecipient extends Recipient {
         return recipientAddress;
     }
 
-    // TODO zaimplementuj validateRecipient() - sprawdzenie poprawności adresu push.
-    //  Sprawdzanie recipientAddress: możesz użyć wyrażenia regularnego:
-    //  Pattern p = Pattern.compile("^[a-zA-Z0-9]*$");
-    //  W przypadku błędu, rzuć wyjątkiem.
     public void validateRecipient() throws SenderException{
             if(!Pattern.matches("^[a-zA-Z0-9]+$", recipientAddress) || (recipientAddress.length() >= 32)){
             throw new SenderException("Adres push jest niepoprawny");
@@ -26,7 +22,6 @@ public class PushRecipient extends Recipient {
 
     @Override
     String anonymize() {
-        // TODO Uzupełnij kod do anonimizacji:
         int length = recipientAddress.length();
         String anonymizedRecipientAddress = recipientAddress.replaceAll(".(?=.{5})", "*");;
         return anonymizedRecipientAddress;
