@@ -48,7 +48,7 @@ public class PriorityQueue<T> {
         intQueue.add(12, 1);
         intQueue.add(11, 6);
         intQueue.add(14, 1);
-        intQueue.add(3, 5);
+        intQueue.add(4, 5);
         intQueue.add(112, 6);
         System.out.println("Queue length before get(): " + intQueue.size() + "\nGot: " + intQueue.get() +
                 "\nQueue length after get(): " + intQueue.size());
