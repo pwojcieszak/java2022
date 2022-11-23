@@ -8,8 +8,6 @@ public class SenderApplication {
     private static final Logger logger = LoggerFactory.getLogger(SenderApplication.class);
 
     public static void main(String[] args) throws SenderException, InterruptedException {
-        // TODO utwórz przykładową wiadomość email oraz push i wyślij
-        //  Zaloguj (logger.info(...)) wysłanie wiadomości.
         String title = "Tytul wiadomosci";
         String body = "Ala ma kota, kot ma Ale";
         
