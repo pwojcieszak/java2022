@@ -16,15 +16,6 @@ public class SenderApplication {
 
   public static void main(String[] args) throws Exception {
 
-    // TODO To jest przykładow rozwiązanie lab07 - wątki CHECKED
-    // Przepisz je tak, aby zamiast kolejki realizowanej jako List<EmailPackage> queue używać bazy danych
-    // Czyli: w tabeli uj_sender.email_queue jest informacja o mailu do wysłania.
-    // Pole uj_sender.email_queue.email_message_id wskazuje na wiadomość do wysłania
-    // Pole uj_sender.email_queue.email_recipient_id wskazuje na odbiorcę
-    // Tabele uj_sender.email_message i uj_sender.email_recipient przechowują odpowiednio treść wiadomości i email odbiorcy
-
-    // 3. Klasa odpowiadająca za połączenie z baza danych i wykonywanie insertów, update'ów, delet'ów
-    //    - opcjonalnie klasy dedykowane dla działań na każdej z 3 tabel osobno
     if (args.length == 2) {
       final int numberOfEnqueuingThreads = Integer.parseInt(args[0]);
       final int numberOfSendingThreads = Integer.parseInt(args[1]);
@@ -34,7 +25,6 @@ public class SenderApplication {
       EmailMessageProvider messageProvider = new EmailMessageProvider();
       RecipientProvider recipientProvider = new EmailRecipientProvider();
 
-      // TODO zastąp połączeniem z uj_sender.email_queue CHECKED
       DB db = new DB();
       db.connect("jdbc:mysql://localhost:3306/uj_sender", "sender-app", "My-secret-pass");
 
@@ -79,12 +69,10 @@ public class SenderApplication {
         do {
           nextMessage = messageProvider.getNextMessage();
           if (nextMessage != null) { // Wyślemy 100 wiadomości
-            // TODO Zapisz nextMessage w bazie danych. Zapamiętaj email_message_id, np = 5555 DONE
             long email_message_id = db.executeUpdate("INSERT INTO email_message(message_title, message_body) " +
                             "VALUES ('" + nextMessage.getMessageTitle() + "', '" + nextMessage.getMessageBody() + "');"
                     , true);
             final Recipient nextRecipient = recipientProvider.getNextRecipient();
-            // TODO Zapisz odbiorcę (nextRecipient) w bazie danych, ale tylko za pierwszym razem DONE
             long email_recipient_id = db.executeUpdate("INSERT INTO email_recipient(recipient_address) " +
                             "SELECT '" + nextRecipient.getRecipientAddress() + "'  WHERE NOT EXISTS (SELECT recipient_address " +
                             "FROM email_recipient WHERE recipient_address = '" + nextRecipient.getRecipientAddress() + "');"
@@ -98,10 +86,7 @@ public class SenderApplication {
               rs.close();
             }
 
-            // Jeśli jest już w bazie, zapamiętaj jego id, np email_recipient_id = 2
-            // TODO synchronizacja na kolejce nie będzie potrzebna przy korzystaniu z bazy danych DONE
             logger.info("Enqueueing message.");
-            // TODO zapisz wiadomość do wysłania w bazie DONE
             db.executeUpdate("INSERT INTO uj_sender.email_queue (email_message_id,email_recipient_id) " +
                     "VALUES (" + email_message_id + "," + email_recipient_id + ");", false);
           }
@@ -129,9 +114,7 @@ public class SenderApplication {
     public void run() {
       do {
         try {
-          // TODO w tym miejscu pobierz z bazy kolejny wpis, którego status jest równy 0 DONE
           ResultSet rs = db.executeQuery("SELECT * FROM email_queue WHERE status_id = 0 LIMIT 1;");
-          // TODO synchronizacja na kolejce nie będzie potrzebna DONE
           if (rs.next()) {
             db.executeUpdate("UPDATE uj_sender.email_queue SET status_id = 1 WHERE email_queue_id  = " +
                     rs.getString(1) + " AND status_id = 0;", false);
@@ -151,7 +134,6 @@ public class SenderApplication {
                     rs.getTimestamp(3));
             logger.info("Delivering message to send.");
             emailSender.send(message, recipient);
-            // TODO po wysłaniu wiadomości, usuń wiadomość z kolejki
             db.executeUpdate("DELETE FROM email_queue WHERE email_queue_id = " + queue.getEmailQueueId() + ";"
                     , false);
             counter = 0;
